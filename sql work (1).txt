@@ -1,0 +1,270 @@
+CREATE TABLE  NODE(
+IDNumber VARCHAR(100) ,
+NType            VARCHAR(100) NOT NULL,
+Location_X       INT NOT NULL,
+Location_Y       INT NOT NULL,
+AcessDistance    DECIMAL(10, 2) AS (SQRT(((100-Location_X)*(100-Location_X))+((100-Location_Y)*(100-Location_Y)))) STORED NOT NULL ,
+NStatus          VARCHAR(100) NOT NULL,
+CONSTRAINT tck_NODE_NStatus CHECK(NStatus IN('Online','Offline')),
+FOREIGN KEY(IDNumber) REFERENCES NODE_NETWORK(IDNumber)
+);
+
+CREATE TABLE NODE_TYPE(
+NType VARCHAR(100) NOT NULL,
+Manufacturer VARCHAR(255) NOT NULL,
+Cost DECIMAL(10, 2) NOT NULL,
+ServiceLife INT NOT NULL,
+CostLifeRatio DECIMAL(10, 2) AS (Cost/ServiceLife) STORED  NOT NULL COMMENT 'Sensor Node Datatype',
+CONSTRAINT PK_NODE_TYPE PRIMARY KEY (NType)
+);
+
+CREATE TABLE NODE_NETWORK(
+IDNumber VARCHAR(100) NOT NULL,
+Network_A VARCHAR(100) NOT NULL,
+Network_B VARCHAR(100) NOT NULL,
+Network_C VARCHAR(100) NOT NULL,
+CONSTRAINT PK_NODE PRIMARY KEY (IDNumber),
+CONSTRAINT tck_NODE_NETWORK_A CHECK(Network_A IN('C','N')),
+CONSTRAINT tck_NODE_NETWORK_B CHECK(Network_B IN('C','N')),
+CONSTRAINT tck_NODE_NETWORK_C CHECK(Network_C IN('C','N'))
+);
+
+CREATE TABLE NETWORK_TRANSMISSION(
+NAME        varchar(100),
+Link_Band  varchar(100)         NOT NULL,
+Link_Type  varchar(100)        NOT NULL,
+CONSTRAINT PK_NETWORK_TRANSMISSION PRIMARY KEY (NAME),
+FOREIGN KEY(NAME) REFERENCES NETWORKS(NAME)
+);
+
+CREATE TABLE NETWORKS(
+NAME        varchar(100),
+NET_Type    varchar(100),
+CONSTRAINT PK_NETWORKS PRIMARY KEY (NAME)
+);
+
+CREATE TABLE NODE_BATTERY(
+NType VARCHAR(100) NOT NULL,
+Battery varchar(100),
+CONSTRAINT PK_NODE_TYPE PRIMARY KEY (NType),
+FOREIGN KEY(NType) REFERENCES NODE_TYPE(NType)
+);
+
+
+
+CREATE TABLE NETWORK_GATEWAY(
+Network_Name varchar(100),
+NET_Type    varchar(100) NOT NULL,
+CONSTRAINT PK_NETWORK_GATEWAY PRIMARY KEY (Network_Name),
+FOREIGN KEY(NET_Type) REFERENCES NETWORKS(NET_Type)
+);
+
+/*
+Population Script for Exam 1
+Created by Gene Locklear
+MARCH 3, 2020
+*/
+
+
+
+SELECT 'Database Accessed' AS MSG_1;
+
+INSERT INTO NODE_TYPE (NType,Manufacturer,Cost,ServiceLife) VALUES('A','General Dynamics',87.12,6);
+INSERT INTO NODE_TYPE (NType,Manufacturer,Cost,ServiceLife) VALUES('B','Lockheed Martin',85.62,6);
+INSERT INTO NODE_TYPE (NType,Manufacturer,Cost,ServiceLife) VALUES('C','MacDonald Douglas',81.90,6);
+INSERT INTO NODE_TYPE (NType,Manufacturer,Cost,ServiceLife) VALUES('D','Boeing',77.42,4);
+INSERT INTO NODE_TYPE (NType,Manufacturer,Cost,ServiceLife) VALUES('E','Grumman',88.18,6);
+
+SELECT 'NODE_TYPE TABLE POPULATED' AS MSG_1;
+
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-001','A',0,2,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-002','A',0,4,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-003','A',0,6,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-004','A',0,8,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-005','A',0,10,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-006','A',0,12,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-007','A',0,14,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-008','A',0,16,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-009','A',0,18,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-010','A',0,20,'Online');
+
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-011','B',10,2,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-012','B',10,4,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-013','B',10,6,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-014','B',10,8,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-015','B',10,10,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-016','B',10,12,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-017','B',10,14,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-018','B',10,16,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-019','B',10,18,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-020','B',10,20,'Offline');
+
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-021','C',20,2,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-022','C',20,4,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-023','C',20,6,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-024','C',20,8,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-025','C',20,10,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-026','C',20,12,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-027','C',20,14,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-028','C',20,16,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-029','C',20,18,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-030','C',20,20,'Offline');
+
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-031','D',30,2,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-032','D',30,4,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-033','D',30,6,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-034','D',30,8,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-035','D',30,10,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-036','D',30,12,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-037','D',30,14,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-038','D',30,16,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-039','D',30,18,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-040','D',30,20,'Offline');
+
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-041','E',40,2,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-042','E',40,4,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-043','E',40,6,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-044','E',40,8,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-045','E',40,10,'Offline');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-046','E',40,12,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-047','E',40,14,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-048','E',40,16,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-049','E',40,18,'Online');
+INSERT INTO NODE (IDNumber,NType,Location_X,Location_Y,NStatus) VALUES('N-050','E',40,20,'Offline');
+
+SELECT 'NODE TABLE POPULATED' AS MSG_2;
+
+INSERT INTO NODE_NETWORK VALUES('N-001','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-002','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-003','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-004','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-005','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-006','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-007','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-008','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-009','C','C','N');
+INSERT INTO NODE_NETWORK VALUES('N-010','C','C','N');
+
+INSERT INTO NODE_NETWORK VALUES('N-011','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-012','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-013','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-014','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-015','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-016','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-017','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-018','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-019','C','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-020','C','C','C');
+
+INSERT INTO NODE_NETWORK VALUES('N-021','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-022','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-023','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-024','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-025','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-026','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-027','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-028','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-029','C','N','N');
+INSERT INTO NODE_NETWORK VALUES('N-030','C','N','N');
+
+INSERT INTO NODE_NETWORK VALUES('N-031','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-032','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-033','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-034','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-035','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-036','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-037','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-038','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-039','N','C','C');
+INSERT INTO NODE_NETWORK VALUES('N-040','N','C','C');
+
+INSERT INTO NODE_NETWORK VALUES('N-041','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-042','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-043','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-044','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-045','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-046','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-047','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-048','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-049','C','N','C');
+INSERT INTO NODE_NETWORK VALUES('N-050','C','N','C');
+
+SELECT 'NODE_NETWORK TABLE POPULATED' AS MSG_3;
+
+INSERT INTO NETWORKS VALUES('A','Wireless Mesh');
+INSERT INTO NETWORKS VALUES('B','Wireless AdHoc Mesh');
+INSERT INTO NETWORKS VALUES('C','Wireless WAN');
+
+SELECT 'NETWORKS TABLE POPULATED' AS MSG_4;
+
+INSERT INTO NETWORK_GATEWAY VALUES('A','N-001');
+INSERT INTO NETWORK_GATEWAY VALUES('B','N-031');
+INSERT INTO NETWORK_GATEWAY VALUES('C','N-045');
+
+SELECT 'NETWORK_GATEWAY TABLE POPULATED' AS MSG_5;
+
+INSERT INTO NODE_BATTERY VALUES('A','Lithium');
+INSERT INTO NODE_BATTERY VALUES('B','Solar');
+INSERT INTO NODE_BATTERY VALUES('C','Magnesium');
+INSERT INTO NODE_BATTERY VALUES('D','Carbon');
+INSERT INTO NODE_BATTERY VALUES('E','Mercury');
+
+SELECT 'NODE_BATTERY TABLE POPULATED' AS MSG_6;
+
+INSERT INTO NETWORK_TRANSMISSION VALUES('A','300 MHZ','Wireless');
+INSERT INTO NETWORK_TRANSMISSION VALUES('B','400 MHZ','Wireless');
+INSERT INTO NETWORK_TRANSMISSION VALUES('C','1 GHZ','Wireless');
+
+SELECT 'NETWORK_TRANSMISSIOM TABLE POPULATED' AS MSG_7;
+
+SELECT 'ALL TABLES POPULATED' AS MSG_8;
+
+-- source C:\\Users\\msgth\\Desktop\\DB_Thursday\\PracticeExams\\QueriesPE1.sql
+
+SELECT (select count(1) from NODE where NStatus = 'Offline')/ (select count(1) from NODE where NStatus = 'Online')
+from dual;
+
+
+SELECT n1.IDNumber,n2.Network_A,n1.NStatus
+FROM NODE n1
+JOIN NODE_NETWORK n2
+ON n1.IDNumber = n2.IDNumber
+and n1.NStatus ='Offline'
+and n2.Network_A = 'C';
+
+
+SELECT n1.IDNumber,n1.NType,n3.Manufacturer,n2.Network_A,n1.NStatus
+FROM NODE n1
+JOIN NODE_NETWORK n2
+ON n1.IDNumber = n2.IDNumber
+JOIN NODE_TYPE n3
+ON n1.NType = n3.NType
+AND n2.Network_A = 'C'
+AND n3.Manufacturer = 'General Dynamics';
+
+
+
+
+SELECT *
+FROM NODE n1
+JOIN NODE_NETWORK n2
+ON n1.IDNumber = n2.IDNumber
+JOIN NODE_BATTERY n3
+ON n1.NType = n3.NType
+AND n2.Network_C = 'C'
+AND (n1.AcessDistance > 120.00 and n1.AcessDistance<135.00);
+
+
+
+SELECT n1.IDNumber AS Node_Id,
+n1.NType AS Node_Type,
+CONCAT("[",n1.Location_X,"-",Location_Y,"]"),
+n1.AcessDistance As Distance_to_master_node,
+n3.Battery AS battery_used
+FROM NODE n1
+JOIN NODE_NETWORK n2
+ON n1.IDNumber = n2.IDNumber
+JOIN NODE_BATTERY n3
+ON n1.NType = n3.NType
+AND n1.NType = 'C'
+AND (n1.AcessDistance > 120.00 and n1.AcessDistance<135.00);
